@@ -1,11 +1,17 @@
 use std::{
-    fs::File,
-    io::{prelude::*, BufReader},
-    path::Path,
+    fs::{File, canonicalize},
+    io::{self, BufRead, BufReader},
+    path::{Path, PathBuf},
     collections::HashMap,
 };
 
 pub const DATA_FILE_PATH: &str = "/Users/p2910482/Projects/rust/AoC_2020/data_files";
+
+pub fn get_data_filepath() -> Option<PathBuf> {
+    let srcdir = PathBuf::from("./../data_files/.");
+    let data_file_dir: PathBuf = canonicalize(&srcdir).expect("Bad data_file_path");
+    Some(data_file_dir)
+}
 
 pub fn lines_from_file(filename: impl AsRef<Path>) -> Vec<String> {
     let file = File::open(filename).expect("no such file");
@@ -13,6 +19,12 @@ pub fn lines_from_file(filename: impl AsRef<Path>) -> Vec<String> {
     buf.lines()
         .map(|l| l.expect("Could not parse line"))
         .collect()
+}
+
+pub fn read_lines<P>(filename: P) -> io::Result<io::Lines<io::BufReader<File>>>
+where P: AsRef<Path>, {
+    let file = File::open(filename)?;
+    Ok(io::BufReader::new(file).lines())
 }
 
 pub fn char_counter(input_string: &str) -> HashMap<char, i32> {
