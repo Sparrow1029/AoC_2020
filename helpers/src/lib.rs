@@ -27,7 +27,7 @@ where P: AsRef<Path>, {
     Ok(io::BufReader::new(file).lines())
 }
 
-pub fn char_counter(input_string: &str) -> HashMap<char, i32> {
+pub fn char_counter(input_string: String) -> HashMap<char, i32> {
     let letter_counts: HashMap<char, i32> =
         input_string
             .to_lowercase()

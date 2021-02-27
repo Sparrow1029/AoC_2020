@@ -20,7 +20,7 @@ fn part_1(path: &PathBuf) -> i32 {
     let mut valid_passwords = 0;
     for line in file_data.iter() {
         let data = get_line_data(line);
-        let counts = helpers::char_counter(data.2);
+        let counts = helpers::char_counter(data.2.to_string());
         let char_count_in_pwd = counts.get(&data.1).unwrap_or(&0i32);
         // password is valid only if character count is in specified range
         if RangeInclusive::new(data.0.0, data.0.1).contains(char_count_in_pwd) {
