@@ -1,29 +1,19 @@
 use std::{collections::{HashMap,HashSet}, fs::File, io::{self, Read}, ops::Index};
-use helpers::{
-    lines_from_file,
-    get_data_filepath
-};
+use helpers::{InputData,get_parsed_data};
 
-const valid_keyarr: [&str; 8] = ["byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid", "cid"];
+const VALID_KEYARR: [&str; 8] = ["byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid", "cid"];
 
 fn get_valid_keys_hashset<'a>() -> HashSet<&'a str> {
     let mut hashset = HashSet::new();
-    for &key in valid_keyarr.into_iter() {
+    for &key in VALID_KEYARR.iter() {
         hashset.insert(key);
     }
     hashset
 }
 
-fn file_read_to_string() -> io::Result<String> {
-    let path = get_data_filepath().unwrap().join("day04_input.txt");
-    let mut file = File::open(&path)?;
-    let mut new_string = String::new();
-    file.read_to_string(& mut new_string)?;
-    Ok(new_string)
-}
 fn get_pgraph_blocks_from_file() -> Vec<String> {
-    let lines = file_read_to_string().unwrap();
-    let blocks = lines.split("\n\n").collect::<Vec<&str>>();
+    let data: InputData = get_parsed_data("day04_input.txt");
+    let blocks = data.as_string.split("\n\n").collect::<Vec<&str>>();
     let mut final_strings = Vec::new();
     for block in blocks {
         &final_strings.push(block.replace("\n", " ").trim().to_string());
@@ -31,12 +21,21 @@ fn get_pgraph_blocks_from_file() -> Vec<String> {
     final_strings
 }
 
-// fn get_arr_of_tups_from_string(string: &String) -> Vec<(&str, &str)> {
-// }
+fn get_arr_of_tups_from_string(string: &String) -> Vec<(&str, &str)> {
+    let mut tuples: Vec<(&str, &str)> = Vec::new();
+    for pair_str in string.split(" ") {
+        let kv = pair_str.split(":").collect::<Vec<&str>>();
+        tuples.push((kv[0], kv[1]));
+    }
+    tuples
+}
 
 // fn get_passport_from_block(pgraph: &String) {
 // }
 
 fn main() {
-    println!("{:?}", get_pgraph_blocks_from_file())
+    // println!("{:?}", get_pgraph_blocks_from_file())
+    for block in get_pgraph_blocks_from_file() {
+        println!("{:?}", get_arr_of_tups_from_string(&block))
+    }
 }

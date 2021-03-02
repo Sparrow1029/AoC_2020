@@ -1,11 +1,17 @@
 use std::{
     fs::{File, canonicalize},
-    io::{self, BufRead, BufReader},
+    io::{self, BufRead, BufReader, Read},
     path::{Path, PathBuf},
     collections::HashMap,
 };
 
 pub const DATA_FILE_PATH: &str = "/Users/p2910482/Projects/rust/AoC_2020/data_files";
+
+#[derive(Debug)]
+pub struct InputData {
+    pub as_string: String,
+    pub as_vector: Vec<String>,
+}
 
 pub fn get_data_filepath() -> Option<PathBuf> {
     let srcdir = PathBuf::from("./../data_files/.");
@@ -19,6 +25,20 @@ pub fn lines_from_file(filename: impl AsRef<Path>) -> Vec<String> {
     buf.lines()
         .map(|l| l.expect("Could not parse line"))
         .collect()
+}
+
+pub fn get_parsed_data(filename: &str) -> InputData {
+    let path = get_data_filepath().unwrap().join(filename);
+    let file = File::open(&path).expect("file open failed");
+    let lines: Vec<String> = BufReader::new(&file).lines().collect::<Result<_, _>>().unwrap();
+    //TODO: Do I need to reopen here, or what? feel like it's consumed by the first call...
+    let mut file2 = File::open(&path).expect("file open failed 2");
+    let mut new_string = String::new();
+    file2.read_to_string(&mut new_string).expect("Oh no");
+    InputData {
+        as_string: new_string,
+        as_vector: lines,
+    }
 }
 
 pub fn read_lines<P>(filename: P) -> io::Result<io::Lines<io::BufReader<File>>>
