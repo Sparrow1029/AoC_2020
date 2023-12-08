@@ -1,8 +1,0 @@
-[package]
-name = "day01"
-version = "0.1.0"
-authors = ["Alexander Ray <alexander.ray@charter.com>"]
-edition = "2018"
-
-[dependencies]
-helpers = { path = "../helpers"}
