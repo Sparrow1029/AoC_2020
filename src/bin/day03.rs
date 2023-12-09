@@ -4,7 +4,6 @@ fn get_trees_for_slope(grid: &Grid2D<char>, x_slope: usize, y_slope: usize) -> u
     let mut trees = 0;
     for (x, y) in (0..grid.height).zip(0..grid.height) {
         let pt = ((x * x_slope) % grid.width, y * y_slope).into();
-        // println!("\t{pt:?}");
         if let Some(c) = grid.get(pt) {
             if *c == '#' {
                 trees += 1
