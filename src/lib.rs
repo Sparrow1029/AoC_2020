@@ -1,3 +1,5 @@
+pub mod grid;
+
 use std::fs::read_to_string;
 
 pub fn get_puzzle_input_string(day: u32) -> anyhow::Result<String> {
